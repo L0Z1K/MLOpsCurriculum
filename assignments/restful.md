@@ -2,14 +2,13 @@
 
 특정 유저의 돈을 다른 유저에게 전달하는 상황 (ex. 3번 사람이 4번 사람에게 1000원 전달)
 
-> PUT /users/:id/transfer
-
-User의 Balance가 **Update**되기 때문에 PUT Method를 사용하였습니다.
+> POST /transaction
 
 ### Parameter
 
 ```json
 {
+    "from": 3, // int, 보낼 사람의 id
     "to": 4, // int, 받을 사람의 id
     "amount": 1000 // int, 전달할 금액
 }
