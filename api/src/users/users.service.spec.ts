@@ -103,5 +103,45 @@ describe('UsersService', () => {
     });
   });
 
-  describe('update', () => {});
+  describe('update', () => {
+    it('should update a user', () => {
+      service.create({
+        name: 'Test User',
+        age: 20,
+      });
+      service.update(1, { name: 'Updated Test User' });
+      const user = service.getOne(1);
+      expect(user.name).toEqual('Updated Test User');
+    });
+
+    it('should throw 409 error', () => {
+      service.create({
+        name: 'Test User',
+        age: 20,
+      });
+      service.create({
+        name: 'Test User2',
+        age: 30,
+      });
+      try {
+        service.update(1, { name: 'Test User2' });
+      } catch (e) {
+        expect(e).toBeInstanceOf(ConflictException);
+        expect(e.message).toEqual('The user already exists.');
+      }
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete a user', () => {
+      service.create({
+        name: 'Test User',
+        age: 20,
+      });
+      const beforeUsers = service.getAll().length;
+      service.delete(1);
+      const afterUsers = service.getAll().length;
+      expect(afterUsers).toEqual(beforeUsers - 1);
+    });
+  });
 });
