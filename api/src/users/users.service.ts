@@ -7,54 +7,58 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
-  getAll(): User[] {
-    return this.users;
+  async getAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  getOne(userId: number): User {
-    if (Number.isNaN(userId)) {
+  async getOne(id: number): Promise<User> {
+    if (Number.isNaN(id)) {
       throw new BadRequestException('Invalid user id');
     }
-    const user = this.users.find((user) => user.id === userId);
+    const user = this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('The user is not found.');
     }
     return user;
   }
 
-  create(userData: createUserDTO): User {
-    const exists = this.users.find((user) => user.name === userData.name);
+  async create(userData: createUserDTO): Promise<User> {
+    const exists = this.usersRepository.findOneBy({ name: userData.name });
     if (exists) {
       throw new ConflictException('The user already exists.');
     }
-    const newUser = {
-      id: this.users.length + 1,
-      ...userData,
-    };
-    this.users.push(newUser);
-    return newUser;
+    const user = new User();
+    user.name = userData.name;
+    user.age = userData.age;
+    await this.usersRepository.save(user);
+    return user;
   }
 
-  update(userId: number, userData: updateUserDTO): User {
-    const user = this.getOne(userId);
-    this.delete(userId);
-    const updatedUser = { ...user, ...userData };
-    const exists = this.users.find((user) => user.name === userData.name);
-    if (exists) {
-      throw new ConflictException('The user already exists.');
+  async update(userId: number, userData: updateUserDTO): Promise<User> {
+    const user = await this.getOne(userId);
+    if (userData.name) {
+      user.name = userData.name;
     }
-    this.users.push(updatedUser);
-    return updatedUser;
+    if (userData.age) {
+      user.age = userData.age;
+    }
+    await this.usersRepository.save(user);
+    return user;
   }
 
-  delete(userId: number): User {
-    const deletedUser = this.getOne(userId);
-    this.users = this.users.filter((user) => user.id !== userId);
+  async delete(userId: number): Promise<User> {
+    const deletedUser = await this.getOne(userId);
+    await this.usersRepository.delete(deletedUser);
     return deletedUser;
   }
 }
