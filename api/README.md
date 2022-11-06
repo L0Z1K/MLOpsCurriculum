@@ -35,6 +35,12 @@ $ npm install
 ## Running the app
 
 ```bash
+# Run MySQL Database in local
+$ docker run --name mysql-local -p 3306:3306/tcp -e MYSQL_ROOT_PASSWORD=test -d mysql:8
+# And you should create 'test' table in mysql
+```
+
+```bash
 # development
 $ npm run start
 
