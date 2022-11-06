@@ -1,6 +1,6 @@
 import { updateUserDTO } from './dto/update-user.dto';
 import { createUserDTO } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { User } from './user.entity';
 import {
   BadRequestException,
   ConflictException,
@@ -25,7 +25,7 @@ export class UsersService {
     if (Number.isNaN(id)) {
       throw new BadRequestException('Invalid user id');
     }
-    const user = this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('The user is not found.');
     }
@@ -33,7 +33,9 @@ export class UsersService {
   }
 
   async create(userData: createUserDTO): Promise<User> {
-    const exists = this.usersRepository.findOneBy({ name: userData.name });
+    const exists = await this.usersRepository.findOneBy({
+      name: userData.name,
+    });
     if (exists) {
       throw new ConflictException('The user already exists.');
     }
