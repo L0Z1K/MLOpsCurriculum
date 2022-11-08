@@ -11,6 +11,7 @@ const mockUsersRepo = {
   find: jest.fn(),
   findOneBy: jest.fn(),
   save: jest.fn(),
+  delete: jest.fn(),
 };
 
 describe('UsersService', () => {
@@ -18,8 +19,6 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [],
-      //   imports: [TypeOrmModule.forRoot(), TypeOrmModule.forFeature([User])],
       providers: [
         UsersService,
         {
@@ -94,7 +93,52 @@ describe('UsersService', () => {
     });
   });
 
-  describe('update', () => {});
+  describe('update', () => {
+    it('should update a user name', async () => {
+      jest.spyOn(service, 'getOne').mockResolvedValue({
+        id: 1,
+        name: 'Test User',
+        age: 30,
+      });
+      jest.spyOn(mockUsersRepo, 'save').mockResolvedValue({
+        id: 1,
+        name: 'Updated Test User',
+        age: 30,
+      });
+      const user = await service.update(1, { name: 'Updated Test User' });
+      expect(user.name).toEqual('Updated Test User');
+    });
 
-  describe('delete', () => {});
+    it('should update a user age', async () => {
+      jest.spyOn(service, 'getOne').mockResolvedValue({
+        id: 1,
+        name: 'Test User',
+        age: 30,
+      });
+      jest.spyOn(mockUsersRepo, 'save').mockResolvedValue({
+        id: 1,
+        name: 'Test User',
+        age: 25,
+      });
+      const user = await service.update(1, { age: 25 });
+      expect(user.age).toEqual(25);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete a user', async () => {
+      jest.spyOn(service, 'getOne').mockResolvedValue({
+        id: 1,
+        name: 'Test User',
+        age: 30,
+      });
+      jest.spyOn(mockUsersRepo, 'delete').mockResolvedValue({
+        id: 1,
+        name: 'Test User',
+        age: 30,
+      });
+      const user = await service.delete(1);
+      expect(user.id).toEqual(1);
+    });
+  });
 });
