@@ -100,11 +100,7 @@ describe('UsersService', () => {
         name: 'Test User',
         age: 30,
       });
-      jest.spyOn(mockUsersRepo, 'save').mockResolvedValue({
-        id: 1,
-        name: 'Updated Test User',
-        age: 30,
-      });
+      jest.spyOn(mockUsersRepo, 'save').mockImplementation((user) => user);
       const user = await service.update(1, { name: 'Updated Test User' });
       expect(user.name).toEqual('Updated Test User');
     });
