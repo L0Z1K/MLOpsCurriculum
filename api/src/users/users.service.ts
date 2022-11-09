@@ -1,5 +1,5 @@
-import { updateUserDTO } from './dto/update-user.dto';
-import { createUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
 import { User } from './user.entity';
 import {
   BadRequestException,
@@ -32,7 +32,7 @@ export class UsersService {
     return user;
   }
 
-  async create(userData: createUserDTO): Promise<User> {
+  async create(userData: CreateUserDTO): Promise<User> {
     const exists = await this.usersRepository.findOneBy({
       name: userData.name,
     });
@@ -46,7 +46,7 @@ export class UsersService {
     return user;
   }
 
-  async update(userId: number, userData: updateUserDTO): Promise<User> {
+  async update(userId: number, userData: UpdateUserDTO): Promise<User> {
     const user = await this.getOne(userId);
     if (userData.name) {
       user.name = userData.name;

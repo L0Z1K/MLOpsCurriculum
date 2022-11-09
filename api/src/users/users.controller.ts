@@ -1,5 +1,5 @@
-import { updateUserDTO } from './dto/update-user.dto';
-import { createUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import {
   Body,
@@ -26,12 +26,12 @@ export class UsersController {
   }
 
   @Post()
-  create(@Body() userData: createUserDTO) {
+  create(@Body() userData: CreateUserDTO) {
     return this.usersService.create(userData);
   }
 
   @Put('/:id')
-  update(@Param('id') userId: number, @Body() updateUserData: updateUserDTO) {
+  update(@Param('id') userId: number, @Body() updateUserData: UpdateUserDTO) {
     return this.usersService.update(userId, updateUserData);
   }
 
