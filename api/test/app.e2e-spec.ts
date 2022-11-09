@@ -68,8 +68,8 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/users/:id (GET)', () => {
-    it('returns user well', () => {
-      request(app.getHttpServer()).post('/users').send({
+    it('returns user well', async () => {
+      await request(app.getHttpServer()).post('/users').send({
         name: 'Baek',
         age: 23,
       });
@@ -117,8 +117,8 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/users/:id (PUT)', () => {
-    it('updates well', () => {
-      request(app.getHttpServer()).post('/users').send({
+    it('updates well', async () => {
+      await request(app.getHttpServer()).post('/users').send({
         name: 'Baek',
         age: 23,
       });
@@ -135,8 +135,8 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/users/:id (DELETE)', () => {
-    it('deletes well', () => {
-      request(app.getHttpServer()).post('/users').send({
+    it('deletes well', async () => {
+      await request(app.getHttpServer()).post('/users').send({
         name: 'Baek',
         age: 23,
       });
