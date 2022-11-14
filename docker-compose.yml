@@ -18,6 +18,8 @@ services:
     build: .
     ports:
       - 3000:3000
+    links:
+      - local-db:local-db
     depends_on:
       - local-db
     networks:
