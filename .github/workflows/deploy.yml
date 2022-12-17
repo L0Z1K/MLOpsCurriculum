@@ -11,7 +11,7 @@ env:
   ECR_REPOSITORY: ${{ secrets.ECR_DOMAIN }}/mlopscurriculum           # set this to your Amazon ECR repository name
   ECS_SERVICE: mlopscurriculum-baek                 # set this to your Amazon ECS service name
   ECS_CLUSTER: mlopscurriculum                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: mlopscurriculum-api # set this to the path to your Amazon ECS task definitio
+  ECS_TASK_DEFINITION: mlopscurriculum-baek # set this to the path to your Amazon ECS task definitio
   CONTAINER_NAME: mlopscurriculum  
 
 jobs:
