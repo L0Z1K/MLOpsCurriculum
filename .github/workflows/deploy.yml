@@ -4,15 +4,14 @@ on:
   push:
     branches:
       - main
-      - test/ci
+      - test/ci # it should be remove when deploying.
 
 env:
   AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: ${{ secrets.ECR_DOMAIN }}/mlopscurriculum           # set this to your Amazon ECR repository name
   ECS_SERVICE: mlopscurriculum-baek                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: mlopscurriculum                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: mlopscurriculum-baek # set this to the path to your Amazon ECS task definitio
-  CONTAINER_NAME: mlopscurriculum  
+  ECS_CLUSTER: mlopscurriculum-baek                 # set this to your Amazon ECS cluster name
+  CONTAINER_NAME: mlopscurriculum-api
 
 jobs:
   build:
@@ -66,11 +65,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
     
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition my-task-definition-family --query taskDefinition > task-definition.json
+      
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: task-definition.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ secrets.ECR_DOMAIN }}/mlopscurriculum:${{ github.sha }}
 
