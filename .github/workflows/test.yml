@@ -1,0 +1,25 @@
+name: Continuous Integration
+
+on: [pull_request]
+
+defaults:
+  run:
+    working-directory: ./api
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+
+      - name: yarn install
+        run: yarn install --pure-lockfile
+
+      - name: Test unit
+        run: yarn test
+      
