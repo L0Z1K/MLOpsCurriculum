@@ -2,6 +2,12 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 
+const cfg = new pulumi.Config();
+export const config = {
+  DATABASE_USER: cfg.require("DATABASE_USER"),
+  DATABASE_PASS: cfg.require("DATABASE_PASS"),
+};
+
 const current = aws.getCallerIdentity({});
 export const accountId = current.then((current) => current.accountId);
 export const callerArn = current.then((current) => current.arn);
@@ -26,9 +32,9 @@ const _default = new aws.rds.Instance("default", {
   engineVersion: "5.7",
   instanceClass: "db.t3.micro",
   parameterGroupName: "default.mysql5.7",
-  password: "corcaJJang",
+  password: config.DATABASE_PASS,
   skipFinalSnapshot: true,
-  username: "admin",
+  username: config.DATABASE_USER,
   vpcSecurityGroupIds: securityGroups,
 });
 
@@ -51,7 +57,7 @@ const service = new awsx.ecs.FargateService("service", {
         { name: "DATABASE_HOST", value: _default.address },
         { name: "DATABASE_PORT", value: "3306" },
         { name: "DATABASE_USER", value: _default.username },
-        { name: "DATABASE_PASS", value: "corcaJJang" },
+        { name: "DATABASE_PASS", value: config.DATABASE_PASS },
         { name: "DATABASE_NAME", value: _default.dbName },
       ],
     },
