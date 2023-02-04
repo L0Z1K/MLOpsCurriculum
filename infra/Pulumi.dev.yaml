@@ -1,0 +1,5 @@
+config:
+  aws:region: ap-northeast-2
+  aws:profile: corca
+  DATABASE_USER: admin
+  DATABASE_PASS: corcaJJang
