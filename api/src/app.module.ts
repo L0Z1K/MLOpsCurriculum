@@ -5,6 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { LoggerModule } from './logger/logger.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './users/http-exception.filter';
+import { WithPathLogger } from './logger/with-path.logger';
 
 @Module({
   imports: [

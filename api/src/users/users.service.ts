@@ -9,18 +9,15 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { WithPathLogger } from 'src/logger/with-path.logger';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private readonly logger: WithPathLogger,
   ) { }
 
   async getAll(): Promise<User[]> {
-    this.logger.log("Hi there!");
     return this.usersRepository.find();
   }
 
