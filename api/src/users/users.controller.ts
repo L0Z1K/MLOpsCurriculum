@@ -16,7 +16,7 @@ import { HttpExceptionFilter } from './http-exception.filter';
 @UseFilters(HttpExceptionFilter)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   getAll() {

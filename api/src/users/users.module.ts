@@ -10,4 +10,4 @@ import { LoggerModule } from 'src/logger/logger.module';
   controllers: [UsersController],
   providers: [UsersService],
 })
-export class UsersModule { }
+export class UsersModule {}
